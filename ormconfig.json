@@ -1,0 +1,10 @@
+{
+    "type": "mysql",
+    "host": "den1.mysql6.gear.host",
+    "port": 3306,
+    "username": "spaces",
+    "password": "Gk74aHi8?z!9",
+    "database": "spaces",
+    "entities": ["src/**/**.entity{.ts,.js}"],
+    "synchronize": true
+}

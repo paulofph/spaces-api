@@ -18,10 +18,12 @@ import {
   import { AuthService } from './auth.service';
   import { AuthController } from './auth.controller';
 //   import { bodyValidatorMiddleware } from './middlewares/body-validator.middleware';
-  
+  import { Token } from './entities/token.entity';
+  import { TypeOrmModule } from '@nestjs/typeorm';
   @Module({
     imports: [
         // UserModule
+        TypeOrmModule.forFeature([Token])
     ],
     providers: [
       ...authProviders,
@@ -35,6 +37,5 @@ import {
       consumer
         .apply(authenticate('facebook', { session: false }))
         .forRoutes('api/auth/facebook/token');
-  
     }
   }
