@@ -17,19 +17,17 @@ export class AuthController {
   }
    @Post('facebook/token')
   async requestFacebookAccessToken(@Req() req: Request): Promise<IToken> {
-    return await this.authService.requestFacebookAccessToken(req.body.code);
+    const accessToken = await this.authService.requestFacebookAccessToken(req.body.code);
+    return accessToken;
   }
    @Post('facebook/signin')
   async facebookSignIn(@Req() req: any): Promise<any> {
-    console.log(req)
     return await this.authService.createToken(req.user);
   }
 
-//   @Get('authorized')
-//   @Roles('user')
-//   @UseGuards(AuthGuard('jwt'), RolesGuard)
-//   public async authorized(): Promise<any> {
-//     console.log('Authorized route...');
-//     return {'message': 'Hello'};
-//   }
+  @Get('authorized')
+  @UseGuards(AuthGuard('jwt'))
+  public async authorized(): Promise<any> {
+    return {'message': 'Hello'};
+  }
 }

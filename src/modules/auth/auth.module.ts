@@ -8,12 +8,12 @@ import {
   
   // Strategies
 //   import { LocalStrategy } from './passport/local.strategy';
-//   import { JwtStrategy } from './passport/jwt.strategy';
+  import { JwtStrategy } from './passport/jwt.strategy';
   import { FacebookStrategy } from './passport/facebook.strategy';
 //   import { TwitterStrategy } from './passport/twitter.strategy';
 //   import { GoogleStrategy } from './passport/google-plus.strategy';
   
-//   import { UserModule } from '../user/user.module';
+  import { UserModule } from '../user/user.module';
   import { authProviders } from './auth.providers';
   import { AuthService } from './auth.service';
   import { AuthController } from './auth.controller';
@@ -22,13 +22,14 @@ import {
   import { TypeOrmModule } from '@nestjs/typeorm';
   @Module({
     imports: [
-        // UserModule
+        UserModule,
         TypeOrmModule.forFeature([Token])
     ],
     providers: [
       ...authProviders,
       AuthService,
       FacebookStrategy,
+      JwtStrategy
     ],
     controllers: [AuthController]
   })
@@ -37,9 +38,5 @@ import {
       consumer
       .apply(authenticate('facebook', { session: false }))
       .forRoutes({ path: 'api/auth/facebook/signin', method: RequestMethod.POST });
-
-      consumer
-      .apply(authenticate('jwt', { session: false }))
-      .forRoutes({ path: 'api/auth/authorized', method: RequestMethod.ALL });
     }
   }
