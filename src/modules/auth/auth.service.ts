@@ -10,7 +10,7 @@ import {
 //   TWITTER_CONFIG_TOKEN,
 //   GOOGLE_CONFIG_TOKEN
 } from '../../config.constants';
-// import { IUser } from '../user/interfaces/user.interface';
+import { IUser } from '../user/interfaces/user.interface';
 // import { IToken } from './interfaces/token.interface';
 import { IFacebookConfig } from './interfaces/facebook-config.interface';
 // import { ITwitterConfig } from './interfaces/twitter-config.interface';
@@ -30,12 +30,10 @@ export class AuthService {
   }
 
   async createToken(user: any): Promise<any> {
-    console.log("creating token")
     const expiresIn: string = '48h';
     const token: string = sign({
       sub: user.id
     }, SERVER_CONFIG.jwtSecret, {expiresIn});
-
     return {
       token
     };
@@ -52,14 +50,11 @@ export class AuthService {
       `state=${this.fbConfig.state}`
     ];
     const redirect_uri: string = `${this.fbConfig.login_dialog_uri}?${queryParams.join('&')}`;
-
-    return {
+     return {
       redirect_uri
     };
   }
-
-  async facebookSignIn(code: string): Promise<any> {
-    code = 'AQBophgswhSIT4rITZqE0uEkqkjid7ri7hALWmQiDwdE7nkJsGxBu5sFn6xq2i6QESABRcQ9BKXl7IdPsXS_3d_SIcss7C8Q8CEdStpfmWax6e628IDNQq33Tr0HJ99QTxx4yFmSws6xqhozGIGDwufdnESEc9uF_D_kebb0dp_Fubxf5pIIF2i4ns_02NipC6pjSVlmi00e-w4-lysgRurGZETU2VkFULHvSYXHDAdH90aIKuOC2-FKyGG0LIpbgbxRQjjReMD6OwY1hWO2xLezEvVfezwiIAwD4LncXtMYusoHnYkteHNwaGfaGEeRlfmAH8K9YIisOfndWHwSSoDj&state=%7Bfbstate%7D#_=_';
+   async requestFacebookAccessToken(code: string): Promise<any> {
     const queryParams: string[] = [
       `client_id=${this.fbConfig.client_id}`,
       `redirect_uri=${this.fbConfig.oauth_redirect_uri}`,
@@ -67,40 +62,15 @@ export class AuthService {
       `code=${code}`
     ];
     const uri: string = `${this.fbConfig.access_token_uri}?${queryParams.join('&')}`;
-  
-    return new Promise((resolve: Function, reject: Function) => { 
+     return new Promise((resolve: Function, reject: Function) => {
       get(uri, (error: Error, response: Response, body: any) => {
         if (error) {
           return reject(error);
         }
-
-        if (body.error) {
+         if (body.error) {
           return reject(body.error);
         }
-        
-        const { access_token } = JSON.parse(body);
-        console.log(JSON.parse(body))
-        console.log(`${this.url}/api/auth/facebook/token`)
-        post({
-          url: `${this.url}/api/auth/facebook/token`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          form: {
-            access_token
-          }
-        }, async (err: Error, res: Response, body: any) => {
-          console.log(1, err)
-          if (err) {
-            return reject(err);
-          }
-          console.log(2, body.error)
-          if (body.error) {
-            return reject(body.error);
-          }
-          console.log(3, body)
-          resolve(body);
-        });
+         resolve(body);
       });
     });
   }

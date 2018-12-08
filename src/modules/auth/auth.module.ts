@@ -35,7 +35,11 @@ import {
   export class AuthModule implements NestModule {
     public configure(consumer: MiddlewareConsumer) {  
       consumer
-        .apply(authenticate('facebook', { session: false }))
-        .forRoutes('api/auth/facebook/token');
+      .apply(authenticate('facebook', { session: false }))
+      .forRoutes({ path: 'api/auth/facebook/signin', method: RequestMethod.POST });
+
+      consumer
+      .apply(authenticate('jwt', { session: false }))
+      .forRoutes({ path: 'api/auth/authorized', method: RequestMethod.ALL });
     }
   }

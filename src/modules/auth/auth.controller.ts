@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
 import { AuthService } from './auth.service';
-// import { IToken } from './interfaces/token.interface';
+import { IToken } from './interfaces/token.interface';
 // import { RolesGuard } from '../../guards/roles.guard';
 // import { Roles } from '../../decorators/roles.decorator';
 
@@ -15,15 +15,13 @@ export class AuthController {
   async requestFacebookRedirectUrl(): Promise<{redirect_uri: string}> {
     return await this.authService.requestFacebookRedirectUri();
   }
-
-  @Post('facebook/signin')
-  async facebookSignIn(): Promise<any> {
-    return await this.authService.facebookSignIn(null);
+   @Post('facebook/token')
+  async requestFacebookAccessToken(@Req() req: Request): Promise<IToken> {
+    return await this.authService.requestFacebookAccessToken(req.body.code);
   }
-
-  @Post('facebook/token')
-  async requestJsonWebTokenAfterFacebookSignIn(@Req() req: any): Promise<any> {
-    console.log(222222)
+   @Post('facebook/signin')
+  async facebookSignIn(@Req() req: any): Promise<any> {
+    console.log(req)
     return await this.authService.createToken(req.user);
   }
 
