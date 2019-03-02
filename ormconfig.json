@@ -1,10 +1,11 @@
 {
-    "type": "mysql",
-    "host": "den1.mysql6.gear.host",
-    "port": 3306,
-    "username": "spaces",
-    "password": "Gk74aHi8?z!9",
-    "database": "spaces",
+    "type": "postgres",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "username": "spaces_user",
+    "password": "spacespwd",
+    "database": "spaces_local",
     "entities": ["src/**/**.entity{.ts,.js}"],
-    "synchronize": true
+    "synchronize": true,
+    "autoSchemaSync": true
 }

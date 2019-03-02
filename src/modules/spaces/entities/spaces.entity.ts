@@ -1,10 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity()
 export class Space {
     @PrimaryGeneratedColumn()
     id: number;
     
-    @Column("point")
-    point: string;
+    @Column("geometry", {
+        nullable: true
+      })
+    @Index({
+    spatial: true
+    })
+    point: object;
 }
