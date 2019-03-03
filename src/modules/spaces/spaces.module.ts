@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { SpaceController } from './space.controller';
 import { SpaceService } from './space.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Space } from './entities/spaces.entity';
+import { SpaceEntity } from './entities/spaces.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Space])],
-  providers: [Space, SpaceService],
+  imports: [TypeOrmModule.forFeature([SpaceEntity])],
+  providers: [SpaceEntity, SpaceService],
   exports: [SpaceService],
   controllers: [SpaceController]
 })
