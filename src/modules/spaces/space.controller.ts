@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { SpaceService } from './space.service';
+import { SpaceFilter } from './models/space-filter';
 
 @Controller('api/spaces')
 export class SpaceController {
@@ -9,7 +10,8 @@ export class SpaceController {
 
     @Get()
     // @UseGuards(AuthGuard('jwt'))
-    async getSpaces(): Promise<any> {
-        return await this.spaceService.findAll()
+    async getSpaces(@Query() query): Promise<any> {
+        const filter = new SpaceFilter(query);
+        return await this.spaceService.findAll(filter);
     }
 }
