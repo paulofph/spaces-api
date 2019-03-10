@@ -4,12 +4,16 @@ import { Request } from 'express';
 
 import { AuthService } from './auth.service';
 import { IToken } from './interfaces/token.interface';
+import { UserService } from '../user/user.service';
 // import { RolesGuard } from '../../guards/roles.guard';
 // import { Roles } from '../../decorators/roles.decorator';
 
 @Controller('api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get('facebook/uri')
   async requestFacebookRedirectUrl(): Promise<{redirect_uri: string}> {
@@ -22,7 +26,8 @@ export class AuthController {
   }
    @Post('facebook/signin')
   async facebookSignIn(@Req() req: any): Promise<any> {
-    return await this.authService.createToken(req.user);
+    const user = await this.userService.findUserById(req.user.id);
+    return await this.authService.createToken(user);
   }
 
   @Get('authorized')

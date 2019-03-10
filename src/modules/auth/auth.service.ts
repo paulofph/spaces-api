@@ -32,7 +32,8 @@ export class AuthService {
   async createToken(user: any): Promise<any> {
     const expiresIn: string = '48h';
     const token: string = sign({
-      sub: user.id
+      sub: user.id,
+      role: user.role.name
     }, SERVER_CONFIG.jwtSecret, {expiresIn});
     return {
       token

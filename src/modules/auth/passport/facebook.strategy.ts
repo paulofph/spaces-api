@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { FACEBOOK_CONFIG_TOKEN, USER_MODEL_TOKEN } from '../../../config.constants';
 import { IFacebookConfig } from '../interfaces/facebook-config.interface';
 import { User } from 'src/modules/user/entities/user.entity';
+import { Role } from 'src/modules/user/entities/role.entity';
 // import { IUser } from '../../user/interfaces/user.interface';
 
 const FacebookTokenStrategy = require('passport-facebook-token');
@@ -30,10 +31,13 @@ export class FacebookStrategy {
           return done(null, existingUser);
         }
         const email: string = profile.emails.shift().value;
+        // ToDo: Ir buscar o Role dinamicamente
+        const role: Role = {id: 1, name: '', users: []}
         const user: User = {
           id: null,
           facebookKey: profile.id,
-          name: profile.displayName
+          name: profile.displayName,
+          role: role
         };
 
         done(null, await this.userRepository.save(user));
