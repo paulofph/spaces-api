@@ -24,4 +24,9 @@ export class SpaceController {
         return res.send(result)
             .sendStatus(HttpStatus.OK);
     }
+
+    @Get('types')
+    async spaceTypes(): Promise<any>{
+        return await this.spaceService.getTypes()
+    }
 }

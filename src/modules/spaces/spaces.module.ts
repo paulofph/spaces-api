@@ -4,10 +4,11 @@ import { SpaceService } from './space.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SpaceEntity } from './entities/spaces.entity';
 import { SpaceModel } from './models/space.model';
+import { SpaceTypeEntity } from './entities/spaceType.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SpaceEntity])],
-  providers: [SpaceEntity, SpaceService, SpaceModel],
+  imports: [TypeOrmModule.forFeature([SpaceEntity, SpaceTypeEntity])],
+  providers: [SpaceEntity, SpaceTypeEntity, SpaceService, SpaceModel],
   exports: [SpaceService],
   controllers: [SpaceController]
 })

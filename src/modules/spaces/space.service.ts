@@ -4,12 +4,15 @@ import { SpaceEntity } from './entities/spaces.entity';
 import { Repository } from 'typeorm';
 import { SpaceModel } from './models/space.model';
 import { SpaceFilter } from './models/space-filter';
+import { SpaceTypeEntity } from './entities/spaceType.entity';
 
 @Injectable()
 export class SpaceService {
     constructor(
         @InjectRepository(SpaceEntity)
         private spaceRepository: Repository<SpaceEntity>,
+        @InjectRepository(SpaceTypeEntity)
+        private spaceTypeRepository: Repository<SpaceTypeEntity>,
     ) { }
 
     async findAll(spaceFilter: SpaceFilter): Promise<any> {
@@ -28,23 +31,14 @@ export class SpaceService {
         });
 
         return spaces;
-        return this.spaceRepository
-        .createQueryBuilder("space")
-        .select("ST_X(location)", "longitude")
-        .select("ST_Y(location)", "latitude")
-        .where("ST_Distance(space.location, ST_GeomFromGeoJSON(:origin)) > 0")
-        .setParameters({ origin: JSON.stringify(origin) })
-        .getMany()
-
-        return this.spaceRepository
-            .createQueryBuilder("space")
-            .where("ST_Distance(space.location, ST_GeomFromGeoJSON(:origin)) > 0")
-            .setParameters({ origin: JSON.stringify(origin) })
-            .getMany()
     }
 
     async saveSpace(space: SpaceModel) {
         return await this.spaceRepository
             .save(new SpaceEntity(space))   
+    }
+
+    async getTypes() {
+        return await this.spaceTypeRepository.find()
     }
 }
