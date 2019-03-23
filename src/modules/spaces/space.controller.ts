@@ -29,4 +29,9 @@ export class SpaceController {
     async spaceTypes(): Promise<any>{
         return await this.spaceService.getTypes()
     }
+
+    @Get('commodities')
+    async spaceCommodities(): Promise<any>{
+        return await this.spaceService.getCommodities()
+    }
 }
