@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn, JoinTable, ManyToMany } from 'typeorm';
 import { SpaceModel } from '../models/space.model';
 import * as wkt from "terraformer-wkt-parser";
 import { SpaceTypeEntity } from './space.type.entity';
+import { SpaceCommodityEntity } from './space.commodity.entity';
 
 @Entity({name: "space"})
 export class SpaceEntity {
@@ -10,6 +11,12 @@ export class SpaceEntity {
 
     @Column({ nullable: true })
     title: string
+
+    @Column({ nullable: true })
+    description: string
+
+    @Column({ nullable: true })
+    availablePlaces: number
     
     @Column("geometry", { nullable: true })
     @Index({ spatial: true })
@@ -18,6 +25,10 @@ export class SpaceEntity {
     @ManyToOne(type => SpaceTypeEntity)
     @JoinColumn()
     type: SpaceTypeEntity;
+
+    @ManyToMany(type => SpaceCommodityEntity)
+    @JoinTable()
+    commodities: SpaceCommodityEntity[];
 
     constructor(
         public space?: SpaceModel
