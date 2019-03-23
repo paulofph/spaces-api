@@ -1,4 +1,4 @@
 export class Location {
-    longitude: Number;
-    latitude: Number;
+    longitude: number;
+    latitude: number;
 }

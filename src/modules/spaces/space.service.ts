@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SpaceEntity } from './entities/spaces.entity';
 import { Repository } from 'typeorm';
-import { SpaceModel } from './models/space.mode';
+import { SpaceModel } from './models/space.model';
 import { SpaceFilter } from './models/space-filter';
 
 @Injectable()
@@ -16,11 +16,10 @@ export class SpaceService {
         const spaces = [];
         const origin = `${spaceFilter.location.longitude}, ${spaceFilter.location.latitude}`
         const query = `
-            SELECT ST_X(location) as longitude, ST_Y(location) as latitude FROM public.space 
+            SELECT ST_X(location) as longitude, ST_Y(location) as latitude FROM public.space
                 WHERE ST_DWithin(location, ST_MakePoint(${origin})::geography, ${spaceFilter.radius * 1000} );
         `
         const response = await this.spaceRepository.query(query);
-
         response.forEach(el => {
             const space = new SpaceModel()
             space.location.latitude = el.latitude;
@@ -42,5 +41,10 @@ export class SpaceService {
             .where("ST_Distance(space.location, ST_GeomFromGeoJSON(:origin)) > 0")
             .setParameters({ origin: JSON.stringify(origin) })
             .getMany()
+    }
+
+    async saveSpace(space: SpaceModel) {
+        return await this.spaceRepository
+            .save(new SpaceEntity(space))   
     }
 }
