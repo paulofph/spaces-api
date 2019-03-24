@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Res, HttpStatus, Param } from '@nestjs/common';
 import { SpaceService } from './space.service';
 import { SpaceFilter } from './models/space-filter';
 import { SpaceModel } from './models/space.model';
@@ -20,9 +20,7 @@ export class SpaceController {
     @Post()
     async postSpace(@Body() space: SpaceModel, @Res() res: Response): Promise<any> {
         const result = await this.spaceService.saveSpace(space)
-        
-        return res.send(result)
-            .sendStatus(HttpStatus.OK);
+        return res.send(result).sendStatus(HttpStatus.OK);
     }
 
     @Get('types')
@@ -33,5 +31,16 @@ export class SpaceController {
     @Get('commodities')
     async spaceCommodities(): Promise<any>{
         return await this.spaceService.getCommodities()
+    }
+
+    @Get(':id')
+    // @UseGuards(AuthGuard('jwt'))
+    async getSpace(@Param() params, @Res() res: Response): Promise<any> {
+        try {
+            const result = await this.spaceService.find(params.id);
+            return res.send(result).sendStatus(HttpStatus.OK);
+        } catch(e) {
+            return res.sendStatus(HttpStatus.NOT_FOUND)
+        }
     }
 }

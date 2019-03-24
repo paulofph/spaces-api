@@ -36,9 +36,22 @@ export class SpaceService {
         return spaces;
     }
 
+    async find(id) {
+        const result = await this.spaceRepository.findOne({ 
+            where: {id},
+            relations: ["commodities", "type"]
+        })
+        if(!result)
+            throw new Error()
+
+        return new SpaceModel(result)
+    }
+
     async saveSpace(space: SpaceModel) {
-        return await this.spaceRepository
-            .save(new SpaceEntity(space))   
+        const {id} = await this.spaceRepository
+            .save(new SpaceEntity(space));
+            
+        return await this.find(id)
     }
 
     async getTypes() {
@@ -47,5 +60,9 @@ export class SpaceService {
 
     async getCommodities() {
         return await this.spaceCommodityRepository.find()
+    }
+
+    async getSpace( ){
+        return await this.spaceRepository.find()
     }
 }
