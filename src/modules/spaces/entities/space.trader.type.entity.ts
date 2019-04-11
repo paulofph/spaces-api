@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
-@Entity({name: "spaceType"})
-export class SpaceTypeEntity {
+@Entity({name: "spaceTraderType"})
+export class SpaceTraderTypeEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

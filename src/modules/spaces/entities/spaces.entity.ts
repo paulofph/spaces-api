@@ -3,6 +3,7 @@ import { SpaceModel } from '../models/space.model';
 import * as wkt from "terraformer-wkt-parser";
 import { SpaceTypeEntity } from './space.type.entity';
 import { SpaceCommodityEntity } from './space.commodity.entity';
+import { SpaceTraderTypeEntity } from './space.trader.type.entity';
 
 @Entity({name: "space"})
 export class SpaceEntity {
@@ -25,6 +26,10 @@ export class SpaceEntity {
     @ManyToOne(type => SpaceTypeEntity)
     @JoinColumn()
     type: SpaceTypeEntity;
+
+    @ManyToOne(type => SpaceTypeEntity)
+    @JoinColumn()
+    traderType: SpaceTraderTypeEntity;
 
     @ManyToMany(type => SpaceCommodityEntity)
     @JoinTable()
