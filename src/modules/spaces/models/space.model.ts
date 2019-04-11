@@ -10,13 +10,14 @@ export class SpaceModel {
     type: SpaceTypeModel;
 
     constructor(space?) {
+        this.location = new Location();
         for (let key in space) {
-            this[key] = space[key];
-        }
-        if(space && space.location) {
-            this.location = new Location()
-            this.location.longitude = space.location.coordinates[0];
-            this.location.latitude = space.location.coordinates[1];
+            if(key === 'location') {
+                this.location.longitude = space.location.coordinates[0];
+                this.location.latitude = space.location.coordinates[1];
+            }
+            else
+                this[key] = space[key];
         }
     }
 }

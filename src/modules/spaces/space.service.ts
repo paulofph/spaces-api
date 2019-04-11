@@ -6,6 +6,7 @@ import { SpaceModel } from './models/space.model';
 import { SpaceFilter } from './models/space-filter';
 import { SpaceTypeEntity } from './entities/space.type.entity';
 import { SpaceCommodityEntity } from './entities/space.commodity.entity';
+import {getRepository} from "typeorm";
 
 @Injectable()
 export class SpaceService {
@@ -22,17 +23,21 @@ export class SpaceService {
         const spaces = [];
         const origin = `${spaceFilter.location.longitude}, ${spaceFilter.location.latitude}`
         const query = `
-            SELECT ST_X(location) as longitude, ST_Y(location) as latitude FROM public.space
+            SELECT id ,ST_X(location) as longitude, ST_Y(location) as latitude FROM public.space
                 WHERE ST_DWithin(location, ST_MakePoint(${origin})::geography, ${spaceFilter.radius * 1000} );
         `
-        const response = await this.spaceRepository.query(query);
+        let response = await this.spaceRepository.query(query);
+        const ids = response.map(space => space.id );
+
+        response = await getRepository(SpaceEntity)
+            .createQueryBuilder("space")
+            .where("space.id IN (:...id)", { id: ids })
+            .getMany();
+
         response.forEach(el => {
-            const space = new SpaceModel()
-            space.location.latitude = el.latitude;
-            space.location.longitude = el.longitude;
+            const space = new SpaceModel(el)
             spaces.push(space) 
         });
-
         return spaces;
     }
 
