@@ -6,7 +6,7 @@ export class SpaceCommodityEntity {
     id: number;
 
     @Column()
-    label: string
+    name: string
 
     @Column()
     icon: string
