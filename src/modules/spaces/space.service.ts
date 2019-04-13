@@ -32,10 +32,9 @@ export class SpaceService {
         let response = await this.spaceRepository.query(query);
         const ids = response.map(space => space.id );
 
-        response = await getRepository(SpaceEntity)
-            .createQueryBuilder("space")
-            .where("space.id IN (:...id)", { id: ids })
-            .getMany();
+        response = await this.spaceRepository.findByIds(ids, {
+            relations: ["commodities", "type", "traderType"]
+        })
 
         response.forEach(el => {
             const space = new SpaceModel(el)
@@ -46,7 +45,7 @@ export class SpaceService {
 
     async find(id) {
         const result = await this.spaceRepository.findOne({ 
-            where: {id},
+            where: { id },
             relations: ["commodities", "type"]
         })
         if(!result)

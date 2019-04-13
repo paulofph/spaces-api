@@ -27,7 +27,7 @@ export class SpaceEntity {
     @JoinColumn()
     type: SpaceTypeEntity;
 
-    @ManyToOne(type => SpaceTypeEntity)
+    @ManyToOne(type => SpaceTraderTypeEntity)
     @JoinColumn()
     traderType: SpaceTraderTypeEntity;
 
