@@ -7,6 +7,7 @@ import { SpaceFilter } from './models/space-filter';
 import { SpaceTypeEntity } from './entities/space.type.entity';
 import { SpaceCommodityEntity } from './entities/space.commodity.entity';
 import {getRepository} from "typeorm";
+import { SpaceTraderTypeEntity } from './entities/space.trader.type.entity';
 
 @Injectable()
 export class SpaceService {
@@ -15,6 +16,8 @@ export class SpaceService {
         private spaceRepository: Repository<SpaceEntity>,
         @InjectRepository(SpaceTypeEntity)
         private spaceTypeRepository: Repository<SpaceTypeEntity>,
+        @InjectRepository(SpaceTraderTypeEntity)
+        private spaceTraderTypeRepository: Repository<SpaceTraderTypeEntity>,
         @InjectRepository(SpaceCommodityEntity)
         private spaceCommodityRepository: Repository<SpaceCommodityEntity>,
     ) { }
@@ -61,6 +64,10 @@ export class SpaceService {
 
     async getTypes() {
         return await this.spaceTypeRepository.find()
+    }
+
+    async getTraderTypes() {
+        return await this.spaceTraderTypeRepository.find()
     }
 
     async getCommodities() {

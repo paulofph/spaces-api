@@ -28,6 +28,11 @@ export class SpaceController {
         return await this.spaceService.getTypes()
     }
 
+    @Get('traderTypes')
+    async traderTypes(): Promise<any>{
+        return await this.spaceService.getTraderTypes()
+    }
+
     @Get('commodities')
     async spaceCommodities(): Promise<any>{
         return await this.spaceService.getCommodities()
