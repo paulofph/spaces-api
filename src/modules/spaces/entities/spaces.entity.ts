@@ -17,26 +17,26 @@ export class SpaceEntity {
     @Column({ nullable: true })
     description: string
 
-    @Column({ nullable: true })
+    @Column({ name: 'available_places', nullable: true })
     availablePlaces: number
 
     @ManyToOne(type => SpaceTypeEntity)
-    @JoinColumn()
+    @JoinColumn({ name: 'type_id'})
     type: SpaceTypeEntity;
 
     @ManyToOne(type => SpaceTraderTypeEntity)
-    @JoinColumn()
+    @JoinColumn({ name: 'trader_type_id'})
     traderType: SpaceTraderTypeEntity;
 
     @ManyToMany(type => SpaceCommodityEntity)
     @JoinTable()
     commodities: SpaceCommodityEntity[];
 
-    @OneToOne(type => SpaceLocationEntity, locationNew => locationNew.coordinates, {
+    @OneToOne(type => SpaceLocationEntity, location => location.coordinates, {
         cascade: true
     })
-    @JoinColumn({ name: 'location_new_id'})
-    locationNew: SpaceLocationEntity;
+    @JoinColumn({ name: 'location_id'})
+    location: SpaceLocationEntity;
 
     constructor(
         public space?: SpaceModel
@@ -45,8 +45,8 @@ export class SpaceEntity {
             this[key] = space[key];
         }
         if(space && space.location.longitude && space.location.latitude) {
-            this.locationNew = new SpaceLocationEntity();
-            this.locationNew.coordinates = wkt.parse(`POINT(${space.location.longitude} ${space.location.latitude})`);
+            this.location = new SpaceLocationEntity();
+            this.location.coordinates = wkt.parse(`POINT(${space.location.longitude} ${space.location.latitude})`);
         }
     }
 }

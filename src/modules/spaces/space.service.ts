@@ -37,8 +37,8 @@ export class SpaceService {
         const ids = response.map(space => space.id );
 
         response = await getConnection().createQueryBuilder(SpaceEntity, "space")
-            .leftJoinAndSelect("space.locationNew", "locationNew")
-            .where("space.location_new_id IN (:...spaces)", { spaces: ids })
+            .leftJoinAndSelect("space.location", "location")
+            .where("space.location_id IN (:...spaces)", { spaces: ids })
             .getMany();
 
         response.forEach(el => {
@@ -51,12 +51,11 @@ export class SpaceService {
     async find(id) {
         const result = await this.spaceRepository.findOne({ 
             where: { id },
-            relations: ["commodities", "type"]
-        })
+            relations: ["location", "commodities", "type", "traderType"]
+        });
         if(!result)
-            throw new Error()
-
-        return new SpaceModel(result)
+            throw new Error();
+        return new SpaceModel(result);
     }
 
     async saveSpace(space: SpaceModel) {
