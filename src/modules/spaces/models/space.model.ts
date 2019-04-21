@@ -38,3 +38,13 @@ export class SpaceLocationModel {
     latitude: string;
     longitude: string;
 }
+
+export class SpaceAddressModel {
+    route: string = null;
+    locality: string = null;
+    administrativeArea: string = null;
+    country: string = null;
+    postalCode: string = null;
+    streetNumber: string = null;
+    formatedAddress: string;
+}

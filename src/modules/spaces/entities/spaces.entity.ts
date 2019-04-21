@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 import { SpaceModel } from '../models/space.model';
-import * as wkt from "terraformer-wkt-parser";
 import { SpaceTypeEntity } from './space.type.entity';
 import { SpaceCommodityEntity } from './space.commodity.entity';
 import { SpaceTraderTypeEntity } from './space.trader.type.entity';
@@ -45,8 +44,7 @@ export class SpaceEntity {
             this[key] = space[key];
         }
         if(space && space.location.longitude && space.location.latitude) {
-            this.location = new SpaceLocationEntity();
-            this.location.coordinates = wkt.parse(`POINT(${space.location.longitude} ${space.location.latitude})`);
+            this.location = new SpaceLocationEntity(space.location);
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index, ManyToOne, JoinColumn, JoinTable, ManyToMany } from 'typeorm';
-import { SpaceModel } from '../models/space.model';
+import { SpaceModel, SpaceLocationModel } from '../models/space.model';
 import * as wkt from "terraformer-wkt-parser";
 import { SpaceTypeEntity } from './space.type.entity';
 import { SpaceCommodityEntity } from './space.commodity.entity';
@@ -14,5 +14,10 @@ export class SpaceLocationEntity {
     @Index({ spatial: true })
     coordinates: object;
 
-    constructor() { }
+    constructor(
+        public location?: SpaceLocationModel
+    ) {
+        if(location && location.longitude && location.latitude)
+            this.coordinates = wkt.parse(`POINT(${location.longitude} ${location.latitude})`);
+    }
 }
