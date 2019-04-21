@@ -19,10 +19,6 @@ export class SpaceEntity {
 
     @Column({ nullable: true })
     availablePlaces: number
-    
-    @Column("geometry", { nullable: true })
-    @Index({ spatial: true })
-    location: object;
 
     @ManyToOne(type => SpaceTypeEntity)
     @JoinColumn()
@@ -49,7 +45,6 @@ export class SpaceEntity {
             this[key] = space[key];
         }
         if(space && space.location.longitude && space.location.latitude) {
-            this.location = wkt.parse(`POINT(${space.location.longitude} ${space.location.latitude})`);
             this.locationNew = new SpaceLocationEntity();
             this.locationNew.coordinates = wkt.parse(`POINT(${space.location.longitude} ${space.location.latitude})`);
         }
