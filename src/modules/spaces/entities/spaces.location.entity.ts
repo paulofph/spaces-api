@@ -5,7 +5,7 @@ import { SpaceTypeEntity } from './space.type.entity';
 import { SpaceCommodityEntity } from './space.commodity.entity';
 import { SpaceTraderTypeEntity } from './space.trader.type.entity';
 
-@Entity({name: "spaceLocation"})
+@Entity({name: "space_location"})
 export class SpaceLocationEntity {
     @PrimaryGeneratedColumn()
     id: number;

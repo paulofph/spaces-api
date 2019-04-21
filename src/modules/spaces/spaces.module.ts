@@ -7,10 +7,11 @@ import { SpaceModel } from './models/space.model';
 import { SpaceTypeEntity } from './entities/space.type.entity';
 import { SpaceCommodityEntity } from './entities/space.commodity.entity';
 import { SpaceTraderTypeEntity } from './entities/space.trader.type.entity';
+import { SpaceLocationEntity } from './entities/spaces.location.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SpaceEntity, SpaceTraderTypeEntity, SpaceTypeEntity, SpaceCommodityEntity])],
-  providers: [SpaceEntity, SpaceTypeEntity, SpaceTraderTypeEntity, SpaceCommodityEntity, SpaceService, SpaceModel],
+  imports: [TypeOrmModule.forFeature([SpaceEntity, SpaceTraderTypeEntity, SpaceTypeEntity, SpaceCommodityEntity, SpaceLocationEntity])],
+  providers: [SpaceEntity, SpaceTypeEntity, SpaceTraderTypeEntity, SpaceCommodityEntity, SpaceLocationEntity, SpaceService, SpaceModel],
   exports: [SpaceService],
   controllers: [SpaceController]
 })

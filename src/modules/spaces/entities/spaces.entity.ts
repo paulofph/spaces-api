@@ -39,7 +39,7 @@ export class SpaceEntity {
     @OneToOne(type => SpaceLocationEntity, locationNew => locationNew.coordinates, {
         cascade: true
     })
-    @JoinColumn()
+    @JoinColumn({ name: 'location_new_id'})
     locationNew: SpaceLocationEntity;
 
     constructor(

@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SpaceEntity } from './entities/spaces.entity';
-import { Repository } from 'typeorm';
+import { Repository, getConnection } from 'typeorm';
 import { SpaceModel } from './models/space.model';
 import { SpaceFilter } from './models/space-filter';
 import { SpaceTypeEntity } from './entities/space.type.entity';
 import { SpaceCommodityEntity } from './entities/space.commodity.entity';
 import {getRepository} from "typeorm";
 import { SpaceTraderTypeEntity } from './entities/space.trader.type.entity';
+import { SpaceLocationEntity } from './entities/spaces.location.entity';
 
 @Injectable()
 export class SpaceService {
@@ -20,21 +21,25 @@ export class SpaceService {
         private spaceTraderTypeRepository: Repository<SpaceTraderTypeEntity>,
         @InjectRepository(SpaceCommodityEntity)
         private spaceCommodityRepository: Repository<SpaceCommodityEntity>,
+        @InjectRepository(SpaceLocationEntity)
+        private spaceLocationRepository: Repository<SpaceLocationEntity>
     ) { }
 
     async findAll(spaceFilter: SpaceFilter): Promise<any> {
         const spaces = [];
         const origin = `${spaceFilter.location.longitude}, ${spaceFilter.location.latitude}`
-        const query = `
-            SELECT id ,ST_X(location) as longitude, ST_Y(location) as latitude FROM public.space
-                WHERE ST_DWithin(location, ST_MakePoint(${origin})::geography, ${spaceFilter.radius * 1000} );
+        let query = `
+            SELECT id ,ST_X(coordinates) as longitude, ST_Y(coordinates) as latitude FROM public.space_location
+                WHERE ST_DWithin(coordinates, ST_MakePoint(${origin})::geography, ${spaceFilter.radius * 1000} );
         `
-        let response = await this.spaceRepository.query(query);
+
+        let response = await this.spaceLocationRepository.query(query);
         const ids = response.map(space => space.id );
 
-        response = await this.spaceRepository.findByIds(ids, {
-            relations: ["commodities", "type", "traderType"]
-        })
+        response = await getConnection().createQueryBuilder(SpaceEntity, "space")
+            .leftJoinAndSelect("space.locationNew", "locationNew")
+            .where("space.location_new_id IN (:...spaces)", { spaces: ids })
+            .getMany();
 
         response.forEach(el => {
             const space = new SpaceModel(el)
